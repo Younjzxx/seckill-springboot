@@ -73,7 +73,7 @@
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/seckillboot?serverTimezone=GMT%2B8"
                         userId="root"
-                        password="ssss1111">
+                        password="root">
         </jdbcConnection>
 
         <!--生成DataObject类存放位置,即将user_info和user_password在dataobject下分别建立两个java生成文件-->
