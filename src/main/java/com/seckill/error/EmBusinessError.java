@@ -22,12 +22,12 @@ public enum EmBusinessError implements CommonError {
 
 
     @Override
-    public int getErrorCode() {
+    public int getErrCode() {
         return this.errorCode;
     }
 
     @Override
-    public String getErrorMessage() {
+    public String getErrMsg() {
         return this.errMsg;
     }
 

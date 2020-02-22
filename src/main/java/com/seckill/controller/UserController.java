@@ -9,6 +9,7 @@ import com.seckill.service.impl.UserServiceImpl;
 import com.seckill.controller.vos.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sun.misc.BASE64Encoder;
@@ -18,6 +19,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Stephen Jia
@@ -31,6 +34,8 @@ public class UserController extends BaseController{
     private UserServiceImpl userService;
     @Autowired
     private HttpServletRequest httpServletRequest;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
 
@@ -46,10 +51,20 @@ public class UserController extends BaseController{
         }
         //用户登录服务,用来校验用户登录是否合法
         UserBO userBO = userService.validateLogin(telephone, this.EncodeByMd5(password));
-        //将登录凭证加入到用户登陆成功的session
-        this.httpServletRequest.getSession().setAttribute("IS_LOGIN", true);
-        this.httpServletRequest.getSession().setAttribute("LOGIN_USER", userBO);
-        return CommonReturnType.create(null);
+        //修改成若用户登录验证成功后将对应的登录信息和登录凭证一起放入token中
+
+        //生成登录凭证token，每个用户不重复的uuid
+        String uuidToken = UUID.randomUUID().toString();
+        uuidToken = uuidToken.replace("-", "");
+        //建立token和用户登录态之间的联系
+        redisTemplate.opsForValue().set(uuidToken, userBO);
+        //设置超时时间一个小时
+        redisTemplate.expire(uuidToken,1, TimeUnit.HOURS);
+//        //将登录凭证加入到用户登陆成功的session
+//        this.httpServletRequest.getSession().setAttribute("IS_LOGIN", true);
+//        this.httpServletRequest.getSession().setAttribute("LOGIN_USER", userBO);
+        //下发token
+        return CommonReturnType.create(uuidToken);
 
     }
 
@@ -108,7 +123,7 @@ public class UserController extends BaseController{
 
         //将otp验证码通过短信通道发送给用户，省略,并替换为打印到控制台的方式
         System.out.println("telephone = " + telephone + " & otpCode = " + otpCode);//telephone = 13833333333 & otpCode = 47733
-        return CommonReturnType.create(null);
+        return CommonReturnType.create(otpCode);
     }
 
 

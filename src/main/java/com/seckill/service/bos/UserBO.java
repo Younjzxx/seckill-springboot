@@ -6,6 +6,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**bo：business object对象：为业务逻辑层model对象
  * model层面用户是包含密码属性的，只是在持久层设计表的时候将其密码放到了另一个表中，
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * @create 2020-01-28   11:28
  */
 @Data
-public class UserBO {
+public class UserBO implements Serializable {
     private Integer id;
     @NotBlank(message = "用户名不能为空")
     private String name;
