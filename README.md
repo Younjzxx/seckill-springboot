@@ -3,7 +3,8 @@
 * **注册入口：**
 [点击直接进入注册](http://47.115.19.41/resources/getotp.html)：http://47.115.19.41/resources/getotp.html
 
-* **本篇README所有内容仅包括基础部分的构建，项目优化的历程放在了我的博客内，不会再到README中更新。**
+* **本篇README所有内容仅包括基础部分的构建，项目后续优化的历程放在了我的博客内，不会再到README中更新。**
+项目后续优化记录：https://blog.csdn.net/qq_31314141/category_9716839.html
 
 
 
